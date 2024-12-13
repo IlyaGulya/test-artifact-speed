@@ -1,0 +1,23 @@
+name: Create and Upload Large Artifact
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  create-and-upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create large file
+        run: |
+          dd if=/dev/zero of=large_file bs=1048576 count=500 status=progress
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: large-file-artifact
+          path: large_file
+          retention-days: 90
+          if-no-files-found: error
+          compression-level: 0    # Disable compression
